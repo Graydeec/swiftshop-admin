@@ -2,8 +2,9 @@ import React from "react";
 import { useState } from "react";
 import { backendUrl } from "../App";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-const Login = () => {
+const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,8 +15,15 @@ const Login = () => {
         email,
         password,
       });
-      console.log(response);
-    } catch (error) {}
+      if (response.data.success) {
+        setToken(response.data.token);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
   };
 
   return (
